@@ -4,3 +4,4 @@ data/*.db*
 .sites-runtime/
 .DS_Store
 *.tsbuildinfo
+.claude/

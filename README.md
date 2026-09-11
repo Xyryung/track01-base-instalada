@@ -56,6 +56,28 @@ La primera ejecución descarga y guarda el modelo en el dispositivo. A partir de
 - [x] CP10 Datos demo sintéticos y congelado
 - [ ] CP11 Video y repositorio
 
+## Bases preexistentes
+
+En cumplimiento del artículo 11.c de los Términos y Condiciones, se declaran todas las bases preexistentes de terceros usadas en este proyecto y su origen. Todas son librerías open source instaladas sin modificar desde npm (o servicios públicos, donde se indica); ninguna aporta lógica del producto.
+
+| Componente | Origen | Licencia | Uso en el proyecto |
+|---|---|---|---|
+| Node.js 20 | [nodejs.org](https://nodejs.org) | MIT | Entorno de ejecución del servidor |
+| React 19 y react-dom | Meta · [react.dev](https://react.dev) | MIT | Interfaz de usuario |
+| Vite 7 y @vitejs/plugin-react | [vitejs.dev](https://vitejs.dev) | MIT | Servidor de desarrollo y empaquetado del frontend |
+| TypeScript 5 | Microsoft · [typescriptlang.org](https://www.typescriptlang.org) | Apache-2.0 | Tipado estático |
+| Express 5 | [expressjs.com](https://expressjs.com) | MIT | API HTTP local |
+| cors | [github.com/expressjs/cors](https://github.com/expressjs/cors) | MIT | Cabeceras CORS entre interfaz y API |
+| better-sqlite3 | [github.com/WiseLibs/better-sqlite3](https://github.com/WiseLibs/better-sqlite3) | MIT | Persistencia SQLite en el dispositivo |
+| Zod 4 | [zod.dev](https://zod.dev) | MIT | Validación de entradas y de la salida del modelo |
+| lucide-react | [lucide.dev](https://lucide.dev) | ISC | Iconos de la interfaz |
+| @qvac/sdk | Tether · [npmjs.com/package/@qvac/sdk](https://www.npmjs.com/package/@qvac/sdk) | Según su licencia | Inferencia local del modelo (única dependencia de IA) |
+| Llama 3.2 1B Instruct (Q4_0) | Meta, distribuido por QVAC | Llama 3.2 Community License | Modelo de lenguaje que corre en el dispositivo |
+| vitest, tsx, concurrently, @types/* | npm | MIT | Solo desarrollo: tests, ejecución de TypeScript, scripts |
+| Fuentes Fraunces e Instrument Sans | Google Fonts (OFL) | SIL Open Font License | Tipografía de la interfaz. Es el único recurso externo; si no hay conexión se usan las fuentes del sistema y la app funciona igual |
+
+Todo el código de lógica de negocio — extracción y validación de datos, normalización, detección de duplicados y estados, pregunta de seguimiento, agregación, base de datos, API e interfaz — es nuevo y fue escrito durante la ventana de 48 horas del hackathon. No se usaron plantillas ni proyectos previos. La identidad visual (logo y paleta) también se creó durante el evento.
+
 ## Datos
 
 Todos los datos son sintéticos. Clientes, marcas, modelos y ubicaciones son ficticios. No se usa información confidencial de clientes ni información competitiva real.
