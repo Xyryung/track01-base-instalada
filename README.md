@@ -18,15 +18,20 @@ No hay ninguna llamada a una API de IA en la nube. Se puede verificar así:
 
 | Dato | Valor |
 |---|---|
-| Modelo | pendiente (CP0) |
-| Tiempo de respuesta corta | pendiente (CP0) |
-| Prueba sin conexión | pendiente: captura de modo avión en `/docs` |
+| Modelo | Llama 3.2 1B Instruct Q4_0 vía QVAC |
+| Tiempo de respuesta corta | 6–9.2 s con modelo en caché (equipo de desarrollo) |
+| Primera carga | 81.5 s incluyendo descarga/carga inicial de 773 MB |
+| Prueba sin conexión | QVAC validado desde caché local; evidencia visual pendiente en `/docs` |
 
 ## Ejecución
+
+Requiere Node.js 20 o posterior.
 
     npm install
     npm run prueba:qvac    # confirma que QVAC responde en local
     npm run dev            # API local en 8787 e interfaz en 5173
+
+La primera ejecución de QVAC descarga y guarda el modelo en el dispositivo. La interfaz incluye un modo de extracción local determinista para demos rápidas; activar **Usar QVAC** ejecuta el modelo local. Los registros se guardan en SQLite bajo `data/`.
 
 ## Qué hace
 
@@ -38,17 +43,17 @@ No hay ninguna llamada a una API de IA en la nube. Se puede verificar así:
 
 ## Estado
 
-- [ ] CP0 QVAC responde sin red
-- [ ] CP1 Esqueleto y base de datos
-- [ ] CP2 Extracción a JSON
-- [ ] CP3 Guardado de punta a punta
-- [ ] CP4 Pregunta de seguimiento
-- [ ] CP5 Duplicados y estados
-- [ ] CP6 Puntaje de confianza
-- [ ] CP7 Cliente 360
-- [ ] CP8 Dashboard
-- [ ] CP9 Meta adicional
-- [ ] CP10 Datos demo y congelado
+- [x] CP0 Integración QVAC local y prueba reproducible
+- [x] CP1 Esqueleto y base de datos SQLite
+- [x] CP2 Extracción validada a JSON
+- [x] CP3 Guardado de punta a punta
+- [x] CP4 Pregunta de seguimiento priorizada
+- [x] CP5 Duplicados y estados
+- [x] CP6 Puntaje de confianza
+- [x] CP7 Cliente 360
+- [x] CP8 Dashboard
+- [x] CP9 Meta adicional: modo demo sin descarga previa
+- [x] CP10 Datos demo sintéticos y congelado
 - [ ] CP11 Video y repositorio
 
 ## Datos
