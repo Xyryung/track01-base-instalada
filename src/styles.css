@@ -240,6 +240,8 @@ main {
 .country strong { font-size: 0.85rem; }
 .country small { color: var(--muted); font-size: 0.73rem; margin-top: 2px; }
 .country svg { color: var(--line-strong); }
+.subheading { margin: 18px 0 2px; padding-top: 16px; border-top: 1px solid var(--line); text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.66rem; font-weight: 700; color: var(--faint); }
+.subheading + .country { border-top: 0; }
 
 /* ---------- Table ---------- */
 .recent-panel { padding-bottom: 10px; }
@@ -303,18 +305,8 @@ input::placeholder, textarea::placeholder { color: var(--faint); }
 input:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-ring); }
 textarea { resize: vertical; line-height: 1.65; min-height: 170px; }
 
-.narrative { position: relative; }
-.mic {
-  position: absolute; right: 12px; bottom: 12px;
-  width: 38px; height: 38px;
-  display: grid; place-items: center;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  color: var(--primary);
-  background: var(--surface-2);
-  transition: background 0.15s ease;
-}
-.mic:hover { background: var(--primary-soft); }
+.hint { display: flex; align-items: flex-start; gap: 7px; margin: 8px 0 0; color: var(--faint); font-size: 0.72rem; line-height: 1.45; }
+.hint svg { flex: none; margin-top: 2px; color: var(--primary); }
 
 .qvac-active {
   display: flex; align-items: center; gap: 10px;

@@ -83,6 +83,17 @@ export function Dashboard({ data, onCapture }: { data: DashboardData; onCapture:
               <ChevronRight size={17} />
             </div>
           ))}
+          <p className="subheading">Por ciudad</p>
+          {data.byCity.map((item, index) => (
+            <div className="country" key={item.label}>
+              <span className="rank">0{index + 1}</span>
+              <div>
+                <strong>{item.label}</strong>
+                <small>{item.value} equipos</small>
+              </div>
+              <ChevronRight size={17} />
+            </div>
+          ))}
         </section>
       </div>
 

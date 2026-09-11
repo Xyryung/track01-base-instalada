@@ -6,6 +6,7 @@ import {
 } from '@qvac/sdk'
 import { z } from 'zod'
 import type { Extraction } from '../lib/types.js'
+import { canonicalClient, canonicalModality } from '../lib/normalize.js'
 
 const nullableNumber = (schema: z.ZodNumber) => z.preprocess(
   (value) => value == null || value === '' ? null : Number(value),
@@ -63,7 +64,18 @@ Usa null cuando el texto no contenga el dato. Nunca inventes. confidence debe es
   // This guard makes the "never invent" rule deterministic even with a small model.
   if (!/\baños?\b/iu.test(text)) extracted.ageYears = null
   if (!/(?:\b\d+\b|\bun(?:a)?\b)\s+(?:equipos?|unidades?|tomógrafos?|resonancias?|ventiladores?|ecógrafos?|ultrasonidos?|mamógrafos?)/iu.test(text)) extracted.quantity = null
-  return extracted
+  return {
+    ...extracted,
+    client: canonicalClient(extracted.client),
+    modality: canonicalModality(extracted.modality),
+  }
+}
+
+export function warmUpQvac() {
+  const started = performance.now()
+  getModel()
+    .then(() => console.log(`Modelo QVAC en memoria (${Math.round(performance.now() - started)} ms)`))
+    .catch((error) => console.error('No se pudo precargar QVAC:', error))
 }
 
 export async function checkQvac() {

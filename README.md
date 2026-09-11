@@ -12,15 +12,15 @@ El colaborador está dentro de un hospital, con frecuencia sin conectividad esta
 
 No hay ninguna llamada a una API de IA en la nube. Se puede verificar así:
 
-    grep -rn "openai\|anthropic\|https://" src/ servidor/ --include=*.ts
+    grep -rn "openai\|anthropic\|https://" src/ servidor/ --include="*.ts"
 
 ## Modelo y desempeño
 
 | Dato | Valor |
 |---|---|
 | Modelo | Llama 3.2 1B Instruct Q4_0 vía QVAC |
-| Tiempo de respuesta corta | 6–9.2 s con modelo en caché (equipo de desarrollo) |
-| Primera carga | 81.5 s incluyendo descarga/carga inicial de 773 MB |
+| Tiempo de respuesta corta | 12–25 s con modelo en caché (equipo de desarrollo, Apple Silicon) |
+| Primera carga | 81.5 s incluyendo descarga/carga inicial de 773 MB; la API precarga el modelo al arrancar |
 | Prueba sin conexión | QVAC validado desde caché local; evidencia visual pendiente en `/docs` |
 
 ## Ejecución
@@ -35,8 +35,8 @@ La primera ejecución descarga y guarda el modelo en el dispositivo. A partir de
 
 ## Qué hace
 
-1. **Capturar** — el colaborador escribe o dicta lo que vio, en lenguaje natural.
-2. **Entender** — QVAC extrae cliente, ciudad, país, modalidad, cantidad, marca, modelo y antigüedad. Lo que no aparece queda vacío; el modelo tiene prohibido inventar.
+1. **Capturar** — el colaborador escribe lo que vio, en lenguaje natural (o lo dicta con el dictado del sistema operativo; el audio nunca pasa por la aplicación).
+2. **Entender** — QVAC extrae cliente, ciudad, país, modalidad, cantidad, marca, modelo y antigüedad. Lo que no aparece queda vacío; el modelo tiene prohibido inventar. Las modalidades y los nombres de cliente se normalizan a un catálogo ("tomógrafos" → "Tomografía", "Hospital San Gabriel" → "San Gabriel") para que dos autores puedan compararse.
 3. **Preguntar** — el sistema hace una sola pregunta por el dato faltante más valioso.
 4. **Validar** — dos autores que coinciden suben el equipo a Confirmado; las cantidades distintas quedan marcadas como conflicto, visibles, sin resolverse solas.
 5. **Ver** — base instalada por cliente, con la trazabilidad de cada dato, y agregación por país y ciudad.

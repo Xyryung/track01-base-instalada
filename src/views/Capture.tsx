@@ -90,10 +90,12 @@ export function Capture({ onSaved, onCancel }: { onSaved: () => void; onCancel: 
               placeholder="Ej. Vi dos tomógrafos…"
               rows={8}
             />
-            <button className="mic" type="button" title="Dictado disponible desde el sistema">
-              <Mic size={18} />
-            </button>
           </label>
+          <p className="hint">
+            <Mic size={14} />
+            Puedes dictar con el dictado del sistema (en macOS, pulsa dos veces la tecla 🎤/fn). El audio no
+            pasa por esta aplicación.
+          </p>
 
           <div className="sample">
             <span>Prueba con un ejemplo</span>

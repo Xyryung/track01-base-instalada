@@ -3,6 +3,7 @@ import { mkdirSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import type { EquipmentStatus, Extraction, Observation } from '../src/lib/types.js'
 import { followUpFor, missingFields } from '../src/lib/extract.js'
+import { canonicalClient, canonicalModality, matchKey } from '../src/lib/normalize.js'
 
 const dbPath = resolve(process.env.DB_PATH ?? 'data/base-instalada.db')
 mkdirSync(dirname(dbPath), { recursive: true })
@@ -26,8 +27,8 @@ db.exec(`
 type Row = Record<string, string | number | null>
 function mapRow(row: Row): Observation {
   const extraction: Extraction = {
-    client: row.client as string | null, city: row.city as string | null,
-    country: row.country as string | null, modality: row.modality as string | null,
+    client: canonicalClient(row.client as string | null), city: row.city as string | null,
+    country: row.country as string | null, modality: canonicalModality(row.modality as string | null),
     quantity: row.quantity as number | null, brand: row.brand as string | null,
     model: row.model as string | null, ageYears: row.age_years as number | null,
     confidence: Number(row.confidence),
@@ -43,9 +44,21 @@ export function listObservations() {
   return (db.prepare('SELECT * FROM observations ORDER BY id DESC').all() as Row[]).map(mapRow)
 }
 
-export function saveObservation(author: string, sourceText: string, data: Extraction) {
+export function saveObservation(author: string, sourceText: string, extraction: Extraction) {
+  const data: Extraction = {
+    ...extraction,
+    client: canonicalClient(extraction.client),
+    modality: canonicalModality(extraction.modality),
+  }
   const transaction = db.transaction(() => {
-    const candidates = db.prepare(`SELECT * FROM observations WHERE lower(client) = lower(?) AND lower(modality) = lower(?) AND id != ?`).all(data.client, data.modality, -1) as Row[]
+    // Se compara con claves normalizadas (sin acentos ni prefijo de institución)
+    // para que "Hospital San Gabriel / tomografos" coincida con "San Gabriel / Tomografía".
+    const clientKey = matchKey(data.client)
+    const modalityKey = matchKey(data.modality)
+    const candidates = clientKey && modalityKey
+      ? (db.prepare('SELECT * FROM observations WHERE client IS NOT NULL AND modality IS NOT NULL').all() as Row[])
+          .filter((row) => matchKey(canonicalClient(row.client as string)) === clientKey && matchKey(canonicalModality(row.modality as string)) === modalityKey)
+      : []
     let status: EquipmentStatus = 'observado'
     const independent = candidates.find((row) => row.author !== author)
     if (independent) status = Number(independent.quantity) === data.quantity ? 'confirmado' : 'conflicto'

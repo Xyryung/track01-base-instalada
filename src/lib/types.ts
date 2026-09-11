@@ -26,6 +26,7 @@ export interface DashboardData {
   totals: { equipment: number; clients: number; confirmed: number; conflicts: number }
   observations: Observation[]
   byCountry: { label: string; value: number }[]
+  byCity: { label: string; value: number }[]
   byModality: { label: string; value: number }[]
 }
 
