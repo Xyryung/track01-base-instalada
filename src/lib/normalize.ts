@@ -29,6 +29,14 @@ export function canonicalModality(value: string | null): string | null {
   return MODALITIES.find((item) => item.pattern.test(key))?.label ?? value.trim()
 }
 
+/** ¿El texto menciona esta modalidad? Acepta variantes ("tomógrafos" menciona "Tomografía"). */
+export function modalityMentioned(text: string, modality: string | null) {
+  if (!modality) return false
+  const haystack = matchKey(text)
+  const entry = MODALITIES.find((item) => item.label === canonicalModality(modality))
+  return entry ? entry.pattern.test(haystack) : haystack.includes(matchKey(modality))
+}
+
 /** "Hospital del Pacífico" → "Del Pacífico"; "Clínica Horizonte" → "Horizonte". */
 export function canonicalClient(value: string | null): string | null {
   if (!value) return null

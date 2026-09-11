@@ -6,7 +6,7 @@ import {
 } from '@qvac/sdk'
 import { z } from 'zod'
 import type { Extraction } from '../lib/types.js'
-import { canonicalClient, canonicalModality } from '../lib/normalize.js'
+import { groundExtraction } from '../lib/ground.js'
 
 const nullableNumber = (schema: z.ZodNumber) => z.preprocess(
   (value) => value == null || value === '' ? null : Number(value),
@@ -32,7 +32,11 @@ const ExtractionSchema = z.object({
 let modelPromise: Promise<string> | null = null
 
 async function getModel() {
-  modelPromise ??= loadModel({ modelSrc: LLAMA_3_2_1B_INST_Q4_0, modelType: 'llm' })
+  // Si la carga falla, se olvida la promesa para que la siguiente llamada vuelva a intentar.
+  modelPromise ??= loadModel({ modelSrc: LLAMA_3_2_1B_INST_Q4_0, modelType: 'llm' }).catch((error) => {
+    modelPromise = null
+    throw error
+  })
   return modelPromise
 }
 
@@ -43,7 +47,24 @@ function cleanJson(raw: string) {
   return Array.isArray(parsed) ? parsed[0] : parsed
 }
 
+const ATTEMPTS = 2
+
 export async function extractWithQvac(text: string): Promise<Extraction> {
+  // Un modelo de 1B a veces devuelve JSON malformado; se reintenta con el mismo
+  // modelo local en lugar de degradar a otra vía: QVAC es la única extracción.
+  let lastError: unknown
+  for (let attempt = 1; attempt <= ATTEMPTS; attempt++) {
+    try {
+      return groundExtraction(await runModel(text), text)
+    } catch (error) {
+      lastError = error
+      console.warn(`QVAC: intento ${attempt} de ${ATTEMPTS} falló:`, error instanceof Error ? error.message : error)
+    }
+  }
+  throw lastError
+}
+
+async function runModel(text: string) {
   const modelId = await getModel()
   const response = completion({
     modelId,
@@ -59,16 +80,7 @@ Usa null cuando el texto no contenga el dato. Nunca inventes. confidence debe es
       { role: 'user', content: text },
     ],
   })
-  const extracted = ExtractionSchema.parse(cleanJson(await response.text))
-  // Numeric claims are retained only when the source contains the necessary cue.
-  // This guard makes the "never invent" rule deterministic even with a small model.
-  if (!/\baños?\b/iu.test(text)) extracted.ageYears = null
-  if (!/(?:\b\d+\b|\bun(?:a)?\b)\s+(?:equipos?|unidades?|tomógrafos?|resonancias?|ventiladores?|ecógrafos?|ultrasonidos?|mamógrafos?)/iu.test(text)) extracted.quantity = null
-  return {
-    ...extracted,
-    client: canonicalClient(extracted.client),
-    modality: canonicalModality(extracted.modality),
-  }
+  return ExtractionSchema.parse(cleanJson(await response.text))
 }
 
 export function warmUpQvac() {
