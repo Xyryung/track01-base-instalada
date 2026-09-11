@@ -6,7 +6,6 @@ import {
 } from '@qvac/sdk'
 import { z } from 'zod'
 import type { Extraction } from '../lib/types.js'
-import { extractLocally } from '../lib/extract.js'
 
 const nullableNumber = (schema: z.ZodNumber) => z.preprocess(
   (value) => value == null || value === '' ? null : Number(value),
@@ -51,7 +50,10 @@ export async function extractWithQvac(text: string): Promise<Extraction> {
     history: [
       {
         role: 'system',
-        content: 'Extrae equipos médicos observados. Devuelve solo JSON con client, city, country, modality, quantity, brand, model, ageYears, confidence. Usa null cuando un dato no aparece. Nunca inventes. confidence debe estar entre 0 y 1.',
+        content: `Extrae una observación de equipos médicos. Responde únicamente con un objeto JSON válido, sin markdown ni explicaciones, usando exactamente esta estructura:
+{"client":string|null,"city":string|null,"country":string|null,"modality":string|null,"quantity":number|null,"brand":string|null,"model":string|null,"ageYears":number|null,"confidence":number}
+Ejemplo: "Hospital Sol en David, Panamá tiene 2 ultrasonidos marca Acme modelo U1 desde hace 3 años" devuelve {"client":"Hospital Sol","city":"David","country":"Panamá","modality":"Ultrasonido","quantity":2,"brand":"Acme","model":"U1","ageYears":3,"confidence":0.95}.
+Usa null cuando el texto no contenga el dato. Nunca inventes. confidence debe estar entre 0 y 1.`,
       },
       { role: 'user', content: text },
     ],
@@ -61,18 +63,7 @@ export async function extractWithQvac(text: string): Promise<Extraction> {
   // This guard makes the "never invent" rule deterministic even with a small model.
   if (!/\baños?\b/iu.test(text)) extracted.ageYears = null
   if (!/(?:\b\d+\b|\bun(?:a)?\b)\s+(?:equipos?|unidades?|tomógrafos?|resonancias?|ventiladores?|ecógrafos?|ultrasonidos?|mamógrafos?)/iu.test(text)) extracted.quantity = null
-  const grounded = extractLocally(text)
-  return {
-    ...extracted,
-    client: extracted.client ?? grounded.client,
-    city: extracted.city ?? grounded.city,
-    country: extracted.country ?? grounded.country,
-    modality: extracted.modality ?? grounded.modality,
-    quantity: extracted.quantity ?? grounded.quantity,
-    brand: extracted.brand ?? grounded.brand,
-    model: extracted.model ?? grounded.model,
-    ageYears: extracted.ageYears ?? grounded.ageYears,
-  }
+  return extracted
 }
 
 export async function checkQvac() {

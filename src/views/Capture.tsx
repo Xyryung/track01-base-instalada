@@ -12,7 +12,6 @@ const sample =
 export function Capture({ onSaved, onCancel }: { onSaved: () => void; onCancel: () => void }) {
   const [author, setAuthor] = useState('Ana M.')
   const [text, setText] = useState('')
-  const [useQvac, setUseQvac] = useState(false)
   const [result, setResult] = useState<Extraction | null>(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
@@ -23,7 +22,7 @@ export function Capture({ onSaved, onCancel }: { onSaved: () => void; onCancel: 
     try {
       const body = await api<{ extraction: Extraction }>('/api/extract', {
         method: 'POST',
-        body: JSON.stringify({ author, text, useQvac }),
+        body: JSON.stringify({ author, text }),
       })
       setResult(body.extraction)
     } catch (reason) {
@@ -39,7 +38,7 @@ export function Capture({ onSaved, onCancel }: { onSaved: () => void; onCancel: 
     try {
       await api('/api/observations', {
         method: 'POST',
-        body: JSON.stringify({ author, text, useQvac, extraction: result }),
+        body: JSON.stringify({ author, text, extraction: result }),
       })
       onSaved()
     } catch (reason) {
@@ -76,11 +75,11 @@ export function Capture({ onSaved, onCancel }: { onSaved: () => void; onCancel: 
               Autor de la visita
               <input value={author} onChange={(e) => setAuthor(e.target.value)} />
             </label>
-            <label className="qvac-toggle">
-              <span><Sparkles size={17} />Usar QVAC</span>
-              <input type="checkbox" checked={useQvac} onChange={(e) => setUseQvac(e.target.checked)} />
+            <div className="qvac-active" aria-label="QVAC local siempre activo">
+              <Sparkles size={17} />
+              <span><strong>QVAC local</strong><small>Siempre activo</small></span>
               <i />
-            </label>
+            </div>
           </div>
 
           <label className="narrative">
@@ -117,7 +116,7 @@ export function Capture({ onSaved, onCancel }: { onSaved: () => void; onCancel: 
           </button>
           <p className="privacy">
             <ServerOff size={15} />
-            El contenido se procesa en este dispositivo y no sale de aquí.
+            QVAC procesa el contenido en este dispositivo y no lo envía a la nube.
           </p>
         </section>
 

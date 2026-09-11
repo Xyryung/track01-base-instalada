@@ -31,7 +31,7 @@ Requiere Node.js 20 o posterior.
     npm run prueba:qvac    # confirma que QVAC responde en local
     npm run dev            # API local en 8787 e interfaz en 5173
 
-La primera ejecución de QVAC descarga y guarda el modelo en el dispositivo. La interfaz incluye un modo de extracción local determinista para demos rápidas; activar **Usar QVAC** ejecuta el modelo local. Los registros se guardan en SQLite bajo `data/`.
+La primera ejecución descarga y guarda el modelo en el dispositivo. A partir de ahí, **todas las extracciones usan QVAC local obligatoriamente**; no existe un modo alternativo ni llamadas a servicios de IA en la nube. Los registros se guardan en SQLite bajo `data/`.
 
 ## Qué hace
 
@@ -52,7 +52,7 @@ La primera ejecución de QVAC descarga y guarda el modelo en el dispositivo. La 
 - [x] CP6 Puntaje de confianza
 - [x] CP7 Cliente 360
 - [x] CP8 Dashboard
-- [x] CP9 Meta adicional: modo demo sin descarga previa
+- [x] CP9 Meta adicional: validación determinista contra datos inventados
 - [x] CP10 Datos demo sintéticos y congelado
 - [ ] CP11 Video y repositorio
 

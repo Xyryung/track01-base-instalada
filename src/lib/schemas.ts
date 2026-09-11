@@ -18,7 +18,6 @@ export const ExtractionSchema = z.object({
 export const CaptureSchema = z.object({
   author: z.string().trim().min(2).max(60),
   text: z.string().trim().min(8).max(2000),
-  useQvac: z.boolean().default(false),
 })
 
 export const SaveSchema = CaptureSchema.extend({

@@ -316,29 +316,18 @@ textarea { resize: vertical; line-height: 1.65; min-height: 170px; }
 }
 .mic:hover { background: var(--primary-soft); }
 
-.qvac-toggle {
+.qvac-active {
   display: flex; align-items: center; gap: 10px;
   height: 44px; padding: 0 12px;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-sm);
-  cursor: pointer;
-  background: var(--surface);
+  background: var(--primary-soft);
+  color: var(--primary);
 }
-.qvac-toggle span { display: flex; align-items: center; gap: 6px; color: var(--ink-2); }
-.qvac-toggle input { display: none; }
-.qvac-toggle i { width: 34px; height: 19px; border-radius: 10px; background: var(--line-strong); position: relative; flex: none; transition: background 0.2s ease; }
-.qvac-toggle i:after {
-  content: '';
-  position: absolute;
-  width: 15px; height: 15px;
-  border-radius: 50%;
-  background: #fff;
-  left: 2px; top: 2px;
-  box-shadow: 0 1px 2px rgba(16, 30, 54, 0.25);
-  transition: left 0.2s ease;
-}
-.qvac-toggle input:checked + i { background: var(--primary); }
-.qvac-toggle input:checked + i:after { left: 17px; }
+.qvac-active span { display: grid; gap: 1px; color: var(--ink-2); line-height: 1.1; }
+.qvac-active strong { font-size: 0.75rem; }
+.qvac-active small { font-size: 0.65rem; color: var(--muted); }
+.qvac-active i { width: 7px; height: 7px; margin-left: 4px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 3px var(--green-soft); }
 
 .sample { margin-top: 12px; padding: 12px 14px; border-radius: var(--radius-sm); border: 1px dashed var(--line-strong); background: var(--surface-2); display: grid; gap: 6px; }
 .sample span { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; color: var(--faint); }
@@ -514,7 +503,7 @@ textarea { resize: vertical; line-height: 1.65; min-height: 170px; }
   .panel { padding: 19px; }
   .client-grid { grid-template-columns: 1fr; }
   .field-row { align-items: stretch; flex-direction: column; }
-  .qvac-toggle { justify-content: space-between; }
+  .qvac-active { justify-content: space-between; }
   .field-grid { grid-template-columns: 1fr; }
   .bar-row { grid-template-columns: 105px 1fr 24px; }
   .page-header h1 { font-size: 1.55rem; }
