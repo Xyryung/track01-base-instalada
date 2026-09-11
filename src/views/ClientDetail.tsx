@@ -1,5 +1,6 @@
 import { Building2, FileText, Gauge, MapPin, PackageCheck, UsersRound } from 'lucide-react'
 import type { Observation } from '../lib/types'
+import { consolidateEquipment, worstStatus } from '../lib/inventory'
 import { Confidence, Status } from '../components/ui'
 
 function initials(name: string) {
@@ -26,7 +27,8 @@ function firstKnown(items: Observation[], key: 'city' | 'country' | 'brand' | 'm
 }
 
 export function ClientDetail({ name, items, onBack }: { name: string; items: Observation[]; onBack: () => void }) {
-  const quantity = items.reduce((sum, item) => sum + (item.quantity ?? 0), 0)
+  const equipment = consolidateEquipment(items)
+  const quantity = equipment.reduce((sum, group) => sum + (group.quantity ?? 0), 0)
   const authors = new Set(items.map((item) => item.author)).size
   const confidence = items.reduce((sum, item) => sum + item.confidence, 0) / items.length
   const latest = items[0]
@@ -55,15 +57,15 @@ export function ClientDetail({ name, items, onBack }: { name: string; items: Obs
             {location || 'Ubicación pendiente'}
           </p>
         </div>
-        <Status value={latest.status} />
+        <Status value={worstStatus(equipment)} />
       </header>
 
       <section className="metrics" aria-label="Indicadores del cliente">
         <article>
           <span className="metric-icon cyan"><PackageCheck size={20} /></span>
-          <p>Equipos observados</p>
+          <p>Equipos consolidados</p>
           <strong>{quantity}</strong>
-          <small>unidades en total</small>
+          <small>cada equipo contado una vez</small>
         </article>
         <article>
           <span className="metric-icon blue"><FileText size={20} /></span>
@@ -141,17 +143,23 @@ export function ClientDetail({ name, items, onBack }: { name: string; items: Obs
             <div className="panel-heading">
               <div>
                 <p className="eyebrow">Inventario</p>
-                <h2>Equipos por fuente</h2>
+                <h2>Equipos consolidados</h2>
               </div>
             </div>
             <div className="equipment-list">
-              {items.map((item) => (
-                <div className="equipment-row" key={item.id}>
+              {equipment.map((group) => (
+                <div className="equipment-row" key={group.key}>
                   <div>
-                    <strong>{item.modality ?? 'Equipo pendiente'}</strong>
-                    <small>{[item.brand, item.model].filter(Boolean).join(' · ') || 'Marca y modelo pendientes'}</small>
+                    <strong>{group.modality ?? 'Equipo pendiente'}</strong>
+                    <small>
+                      {[group.brand, group.model].filter(Boolean).join(' · ') || 'Marca y modelo pendientes'}
+                      {' · '}{group.authors.length} {group.authors.length === 1 ? 'autor' : 'autores'}
+                    </small>
                   </div>
-                  <b>{item.quantity ?? '—'}</b>
+                  <div className="equipment-side">
+                    <b>{group.quantity ?? '—'}</b>
+                    <Status value={group.status} />
+                  </div>
                 </div>
               ))}
             </div>

@@ -38,8 +38,8 @@ La primera ejecución descarga y guarda el modelo en el dispositivo. A partir de
 1. **Capturar** — el colaborador escribe lo que vio, en lenguaje natural (o lo dicta con el dictado del sistema operativo; el audio nunca pasa por la aplicación).
 2. **Entender** — QVAC extrae cliente, ciudad, país, modalidad, cantidad, marca, modelo y antigüedad. Lo que no aparece queda vacío; el modelo tiene prohibido inventar. Las modalidades y los nombres de cliente se normalizan a un catálogo ("tomógrafos" → "Tomografía", "Hospital San Gabriel" → "San Gabriel") para que dos autores puedan compararse.
 3. **Preguntar** — el sistema hace una sola pregunta por el dato faltante más valioso.
-4. **Validar** — dos autores que coinciden suben el equipo a Confirmado; las cantidades distintas quedan marcadas como conflicto, visibles, sin resolverse solas.
-5. **Ver** — base instalada por cliente, con la trazabilidad de cada dato, y agregación por país y ciudad.
+4. **Validar** — dos autores que coinciden suben el equipo a Confirmado; las cantidades distintas quedan marcadas como conflicto, visibles, sin resolverse solas. El estado se recalcula para todo el grupo (cliente, modalidad) con la última observación de cada autor, así que con tres o más autores todas las filas quedan coherentes y una corrección posterior del mismo autor cuenta.
+5. **Ver** — base instalada por cliente, con la trazabilidad de cada dato, y agregación por país y ciudad. El inventario cuenta **cada equipo una sola vez** por (cliente, modalidad): dos autores que confirman no lo duplican, y en conflicto se muestra la cantidad más reciente sin sumar las versiones.
 
 ## Estado
 

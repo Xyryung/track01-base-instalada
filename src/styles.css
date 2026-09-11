@@ -446,6 +446,8 @@ textarea { resize: vertical; line-height: 1.65; min-height: 170px; }
 .equipment-row strong { font-size: 0.82rem; }
 .equipment-row small { color: var(--muted); font-size: 0.72rem; margin-top: 2px; }
 .equipment-row b { font-size: 0.92rem; }
+.equipment-side { display: flex; align-items: center; gap: 10px; flex: none; }
+.tag-conflict { font-style: normal; color: var(--amber); font-size: 0.7rem; font-weight: 700; }
 
 .detail-side .follow-up { margin-top: 0; }
 

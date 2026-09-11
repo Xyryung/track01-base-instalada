@@ -4,6 +4,7 @@ import { dirname, resolve } from 'node:path'
 import type { EquipmentStatus, Extraction, Observation } from '../src/lib/types.js'
 import { followUpFor, missingFields } from '../src/lib/extract.js'
 import { canonicalClient, canonicalModality, matchKey } from '../src/lib/normalize.js'
+import { statusForGroup } from '../src/lib/inventory.js'
 
 const dbPath = resolve(process.env.DB_PATH ?? 'data/base-instalada.db')
 mkdirSync(dirname(dbPath), { recursive: true })
@@ -59,15 +60,21 @@ export function saveObservation(author: string, sourceText: string, extraction: 
       ? (db.prepare('SELECT * FROM observations WHERE client IS NOT NULL AND modality IS NOT NULL').all() as Row[])
           .filter((row) => matchKey(canonicalClient(row.client as string)) === clientKey && matchKey(canonicalModality(row.modality as string)) === modalityKey)
       : []
-    let status: EquipmentStatus = 'observado'
-    const independent = candidates.find((row) => row.author !== author)
-    if (independent) status = Number(independent.quantity) === data.quantity ? 'confirmado' : 'conflicto'
     const result = db.prepare(`INSERT INTO observations
       (author, source_text, client, city, country, modality, quantity, brand, model, age_years, confidence, status)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
-      .run(author, sourceText, data.client, data.city, data.country, data.modality, data.quantity, data.brand, data.model, data.ageYears, data.confidence, status)
-    if (independent) db.prepare('UPDATE observations SET status = ? WHERE id = ?').run(status, independent.id)
-    return Number(result.lastInsertRowid)
+      .run(author, sourceText, data.client, data.city, data.country, data.modality, data.quantity, data.brand, data.model, data.ageYears, data.confidence, 'observado')
+    const id = Number(result.lastInsertRowid)
+    // El estado se recalcula para TODO el grupo (cliente, modalidad) con la última
+    // observación de cada autor, no solo para el primer par que coincide: con tres o
+    // más autores todas las filas quedan coherentes entre sí.
+    const group = [...candidates, { id, author, quantity: data.quantity }]
+    const status: EquipmentStatus = statusForGroup(group.map((row) => ({
+      id: Number(row.id), author: String(row.author), quantity: row.quantity == null ? null : Number(row.quantity),
+    })))
+    const update = db.prepare('UPDATE observations SET status = ? WHERE id = ?')
+    for (const row of group) update.run(status, row.id)
+    return id
   })
   const id = transaction()
   return mapRow(db.prepare('SELECT * FROM observations WHERE id = ?').get(id) as Row)

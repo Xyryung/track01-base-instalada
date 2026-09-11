@@ -33,15 +33,15 @@ export function Dashboard({ data, onCapture }: { data: DashboardData; onCapture:
         </article>
         <article>
           <span className="metric-icon green"><Check size={20} /></span>
-          <p>Confirmaciones</p>
+          <p>Equipos confirmados</p>
           <strong>{data.totals.confirmed}</strong>
-          <small>observaciones coincidentes</small>
+          <small>validados por dos o más autores</small>
         </article>
         <article>
           <span className="metric-icon amber"><AlertTriangle size={20} /></span>
-          <p>Por revisar</p>
+          <p>En conflicto</p>
           <strong>{data.totals.conflicts}</strong>
-          <small>conflictos visibles</small>
+          <small>cantidades que no coinciden</small>
         </article>
       </section>
 
