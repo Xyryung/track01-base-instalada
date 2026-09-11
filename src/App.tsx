@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Activity, Building2, Database, LayoutDashboard, Plus, X } from 'lucide-react'
+import { Building2, Database, LayoutDashboard, Plus, X } from 'lucide-react'
 import type { DashboardData } from './lib/types'
 import { api } from './lib/api'
+import { Logo } from './components/Logo'
 import { Dashboard } from './views/Dashboard'
 import { Capture } from './views/Capture'
 import { Clients } from './views/Clients'
@@ -34,10 +35,10 @@ export default function App() {
     <div className="app-shell">
       <aside>
         <div className="brand">
-          <span><Activity size={23} /></span>
+          <span><Logo /></span>
           <div>
             <strong>ATLAS</strong>
-            <small>Inteligencia instalada</small>
+            <small>Inteligencia de campo</small>
           </div>
         </div>
 

@@ -1,40 +1,46 @@
 /* ============================================================
    Atlas · Base instalada — Design system
-   Papel cálido · verde bosque · acento terracota.
+   Paleta de marca ATLAS: teal #0E7A6E · ámbar #E3A008 · papel #F6F4ED.
    Display: Fraunces (serif) · UI: Instrument Sans.
+   Los colores semánticos del board se usan en iconos y puntos; para texto
+   pequeño se usa una variante más oscura que cumple AA sobre fondo claro.
    ============================================================ */
 
 :root {
   /* Color */
-  --bg: #f7f5f0;
-  --surface: #fffefb;
-  --surface-2: #f1eee6;
-  --ink: #1f1d18;
-  --ink-2: #45423a;
-  --muted: #6b675c;
-  --faint: #8f8a7d;
-  --line: #e6e2d7;
-  --line-strong: #d3cec1;
+  --bg: #f6f4ed;
+  --surface: #faf8f5;
+  --surface-2: #ede7dd;
+  --ink: #0f1721;
+  --ink-2: #2b3745;
+  --muted: #475569;
+  --faint: #6b7787;
+  --line: #d6d0c7;
+  --line-strong: #c3bbb0;
 
-  --primary: #21574a;
-  --primary-hover: #1a473c;
-  --primary-soft: #e9efe9;
-  --primary-ring: rgba(33, 87, 74, 0.2);
+  --primary: #0e7a6e;
+  --primary-hover: #0b665c;
+  --primary-soft: #e0efec;
+  --primary-ring: rgba(14, 122, 110, 0.22);
 
-  --accent: #b4531f;
-  --accent-soft: #f8ede3;
+  --accent: #e3a008;
+  --accent-soft: #fbf2d9;
+  --accent-ink: #7a5300;
 
-  --green: #1d6b46;
-  --green-soft: #e9f2ea;
-  --green-dot: #2f9461;
-  --blue: #395e75;
-  --blue-soft: #eaf0f2;
-  --blue-dot: #5d87a1;
-  --amber: #955114;
-  --amber-soft: #f8efdf;
-  --amber-dot: #cf8b2e;
-  --red: #a63a2b;
-  --red-soft: #f9eeea;
+  --green: #14703a;
+  --green-soft: #e4f4ea;
+  --green-dot: #16a34a;
+  --blue: #1d4fd8;
+  --blue-soft: #e8eefd;
+  --blue-dot: #2563eb;
+  --amber: #9a4f00;
+  --amber-soft: #fbeedb;
+  --amber-dot: #d97706;
+  --red: #b91c1c;
+  --red-soft: #fdeaea;
+
+  --brand-dark: #0f2a24;
+  --brand-mint: #8fd3c1;
 
   /* Type */
   --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
@@ -43,8 +49,8 @@
   /* Shape & depth */
   --radius: 12px;
   --radius-sm: 8px;
-  --shadow-sm: 0 1px 2px rgba(31, 29, 24, 0.05);
-  --shadow-md: 0 1px 3px rgba(31, 29, 24, 0.06), 0 6px 16px -8px rgba(31, 29, 24, 0.12);
+  --shadow-sm: 0 1px 2px rgba(15, 23, 33, 0.05);
+  --shadow-md: 0 1px 3px rgba(15, 23, 33, 0.06), 0 6px 16px -8px rgba(15, 23, 33, 0.14);
 
   font-family: var(--font-body);
   color: var(--ink);
@@ -92,13 +98,14 @@ aside {
 
 .brand { display: flex; align-items: center; gap: 12px; padding: 0 10px 28px; }
 .brand > span {
-  width: 40px; height: 40px;
+  width: 42px; height: 42px;
   display: grid; place-items: center;
-  color: #fff;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #2e6b58, var(--primary));
-  box-shadow: 0 4px 12px rgba(33, 87, 74, 0.28);
+  color: var(--brand-mint);
+  border-radius: 11px;
+  background: linear-gradient(145deg, #163b33, var(--brand-dark));
+  box-shadow: 0 4px 12px rgba(15, 42, 36, 0.3);
 }
+.brand > span svg { width: 30px; height: 30px; }
 .brand div { display: grid; }
 .brand strong { font: 700 1.08rem/1 var(--font-display); letter-spacing: 0.1em; color: var(--ink); }
 .brand small { color: var(--faint); font-size: 0.72rem; margin-top: 5px; }
@@ -128,7 +135,7 @@ nav button.active { color: var(--primary); background: var(--primary-soft); }
   display: grid;
 }
 .device > span { display: flex; justify-content: space-between; align-items: center; color: var(--primary); margin-bottom: 10px; }
-.device i { width: 8px; height: 8px; background: var(--green-dot); border-radius: 50%; box-shadow: 0 0 0 3px rgba(18, 183, 106, 0.18); }
+.device i { width: 8px; height: 8px; background: var(--green-dot); border-radius: 50%; box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.18); }
 .device strong { font-size: 0.78rem; color: var(--ink-2); }
 .device small { color: var(--faint); font-size: 0.7rem; margin-top: 3px; }
 
@@ -331,7 +338,7 @@ textarea { resize: vertical; line-height: 1.65; min-height: 170px; }
 .error {
   display: flex; align-items: center; gap: 8px;
   padding: 11px 12px; margin-top: 12px;
-  border: 1px solid #e8c4b8;
+  border: 1px solid #f1b8b8;
   border-radius: var(--radius-sm);
   background: var(--red-soft);
   color: var(--red);
@@ -353,7 +360,7 @@ textarea { resize: vertical; line-height: 1.65; min-height: 170px; }
   background: var(--accent-soft);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
-.follow-up span { text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); font-size: 0.63rem; font-weight: 700; }
+.follow-up span { text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-ink); font-size: 0.63rem; font-weight: 700; }
 .follow-up strong { font-size: 0.84rem; color: var(--ink); }
 .follow-up small { color: var(--muted); font-size: 0.7rem; }
 

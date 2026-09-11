@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#0f2a24"/>
+  <g fill="none" stroke="#8fd3c1" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 8C44 6 55 15 55 28C55 40 48 54 34 54C20 54 9 45 9 33C9 21 20 10 32 8Z"/>
+    <path d="M32 8C44 6 55 15 55 28C55 40 48 54 34 54C20 54 9 45 9 33C9 21 20 10 32 8Z" transform="translate(32 32) scale(.7) translate(-32 -32)"/>
+    <path d="M32 8C44 6 55 15 55 28C55 40 48 54 34 54C20 54 9 45 9 33C9 21 20 10 32 8Z" transform="translate(32 32) scale(.42) translate(-32 -32)"/>
+    <polyline points="21,32 26,32 29,27 32,38 35,25 37,32 43,32" stroke-width="3"/>
+  </g>
+</svg>
